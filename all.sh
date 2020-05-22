@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 OPENSHIFT_RELEASE="$1"
-# bash -c 'echo "export TZ=Asia/Shanghai" > /etc/profile.d/tz.sh'
+# bash -c 'echo "export TZ=Asia/Taipei" > /etc/profile.d/tz.sh'
     
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
