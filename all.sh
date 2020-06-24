@@ -20,13 +20,16 @@ OPENSHIFT_RELEASE="$1"
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
 
+
 yum -y install docker
 usermod -aG dockerroot vagrant
 cat > /etc/docker/daemon.json <<EOF
 {
-    "group": "dockerroot"
+    "group": "dockerroot",
+    "registry-mirrors": ["http://nexus.internal.local"]
 }
 EOF
+
 systemctl enable docker
 systemctl start docker
 

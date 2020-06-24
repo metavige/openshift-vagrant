@@ -113,5 +113,12 @@ Vagrant.configure("2") do |config|
     if File.exist?(".vagrant/machines/node02/virtualbox/private_key")
       node.vm.provision "node02-key", type: "file", run: "never", source: ".vagrant/machines/node02/virtualbox/private_key", destination: "/home/vagrant/.ssh/node02.key"
     end
+
+    node.vm.provision "shell", inline: <<-SHELL
+      # Add nexus.internal.local to hosts
+      LOCAL_NEXUS="nexus.internal.local"
+      grep -q $LOCAL_NEXUS /etc/hosts; [ $? -eq 0 ] && \
+          echo "192.168.160.1 $LOCAL_NEXUS" >> /etc/hosts
+    SHELL
   end
 end
