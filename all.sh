@@ -20,12 +20,18 @@ OPENSHIFT_RELEASE="$1"
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
 
+useradd dockerusr -u 100000 -U
+groupmod dockerusr -g 100000
+echo "dockerusr:100000:65536" >> /etc/subuid
+echo "dockerusr:100000:65536" >> /etc/subgid
 
 yum -y install docker
 usermod -aG dockerroot vagrant
+usermod -aG dockerroot dockerusr
 cat > /etc/docker/daemon.json <<EOF
 {
     "group": "dockerroot",
+    "userns-remap": "dockerusr:dockerusr",
     "registry-mirrors": ["http://nexus.internal.local"]
 }
 EOF
