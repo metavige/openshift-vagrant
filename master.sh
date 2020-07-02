@@ -22,6 +22,7 @@ VAGRANT_HOME="/home/vagrant"
 # Sourcing common functions
 . /vagrant/common.sh
 
+
 #===  FUNCTION  ================================================================
 #         NAME:  install_packages
 #  DESCRIPTION:  Install all prerequisite packages
@@ -30,9 +31,11 @@ VAGRANT_HOME="/home/vagrant"
 function install_packages() {
   yum -y install git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct unzip
   if [[ "$(version ${OPENSHIFT_RELEASE})" -gt "$(version 3.7)" ]]; then
-    yum -y install https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.6.6-1.el7.ans.noarch.rpm
+    # yum -y install https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.6.6-1.el7.ans.noarch.rpm
+    yum -y install http://nexus.docker.internal/repository/yum-group/ansible-2.6.6-1.el7.ans.noarch.rpm
   else
-    yum -y install https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.5.9-1.el7.ans.noarch.rpm
+    # yum -y install https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.5.9-1.el7.ans.noarch.rpm
+    yum -y install http://nexus.docker.internal/repository/yum-group/ansible-2.5.9-1.el7.ans.noarch.rpm
   fi
 }
 

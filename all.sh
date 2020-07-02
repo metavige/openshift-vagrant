@@ -16,7 +16,10 @@
 #
 OPENSHIFT_RELEASE="$1"
 # bash -c 'echo "export TZ=Asia/Taipei" > /etc/profile.d/tz.sh'
-    
+
+# update nexus yum source
+/vagrant/nexus.sh
+
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
 
@@ -32,7 +35,7 @@ cat > /etc/docker/daemon.json <<EOF
 {
     "group": "dockerroot",
     "userns-remap": "dockerusr:dockerusr",
-    "registry-mirrors": ["http://nexus.internal.local"]
+    "registry-mirrors": ["http://nexus.docker.internal"]
 }
 EOF
 
@@ -41,8 +44,24 @@ systemctl start docker
 
 # Sourcing common functions
 . /vagrant/common.sh
+
+# ocp repos
+REPO_LIST=$(cat <<END
+    CentOS-OpenShift-Origin311.repo
+    CentOS-ANSIBLE.repo
+END
+)
+
 # Fix missing packages for openshift origin 3.11.0
 # https://lists.openshift.redhat.com/openshift-archives/dev/2018-November/msg00005.html
 if [ "$(version ${OPENSHIFT_RELEASE})" -eq "$(version 3.11)" ]; then
     yum install -y centos-release-openshift-origin311
+
+    for repo in $REPO_LIST
+    do
+        repo_file="/etc/yum.repos.d/$repo"
+        # replace repo
+        sed -i 's/^mirrorlist/#mirrorlist/g' "$repo_file"
+        sed -i 's/^#baseurl=http:\/\/mirror.centos.org\/\$contentdir/baseurl=http:\/\/nexus.docker.internal\/repository\/yum-group/g' "$repo_file"
+    done
 fi
