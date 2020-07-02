@@ -18,3 +18,11 @@ do
     sed -i 's/mirrorlist/#mirrorlist/g' "$repo_file"
     sed -i 's/^#baseurl=http:\/\/mirror.centos.org\/centos/baseurl=http:\/\/nexus.docker.internal\/repository\/yum-group/g' "$repo_file"
 done
+
+rpm -ivh "http://nexus.docker.internal/repository/yum-epel-proxy/epel-release-latest-7.noarch.rpm"
+
+for repo in `ls /etc/yum.repos.d/epel*.repo`
+do
+    sed -i 's/^#baseurl=http:\/\/download.fedoraproject.org\/pub\/epel/baseurl=http:\/\/nexus.docker.internal\/repository\/yum-group/g' "$repo"
+    sed -i 's/^metalink/#metalink/g' "$repo"
+done

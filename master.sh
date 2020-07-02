@@ -22,7 +22,6 @@ VAGRANT_HOME="/home/vagrant"
 # Sourcing common functions
 . /vagrant/common.sh
 
-
 #===  FUNCTION  ================================================================
 #         NAME:  install_packages
 #  DESCRIPTION:  Install all prerequisite packages

@@ -63,5 +63,6 @@ if [ "$(version ${OPENSHIFT_RELEASE})" -eq "$(version 3.11)" ]; then
         # replace repo
         sed -i 's/^mirrorlist/#mirrorlist/g' "$repo_file"
         sed -i 's/^#baseurl=http:\/\/mirror.centos.org\/\$contentdir/baseurl=http:\/\/nexus.docker.internal\/repository\/yum-group/g' "$repo_file"
+        sed -i 's/^baseurl=http:\/\/mirror.centos.org\/centos/baseurl=http:\/\/nexus.docker.internal\/repository\/yum-group/g' "$repo_file"
     done
 fi
